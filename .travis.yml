@@ -10,7 +10,7 @@ script:
 
 after_success:
   - docker build -t cuti/multi-client ./client
-  - docker build -t cuti/multi-work ./worker
+  - docker build -t cuti/multi-worker ./worker
   - docker build -t cuti/multi-server ./server
   - docker build -t cuti/multi-nginx ./nginx
   # Log in to docker CLI
