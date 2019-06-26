@@ -1,0 +1,21 @@
+sudo: required
+services:
+  - docker
+
+before_install:
+  - docker build -t cuti/react-test -f ./client/Dockerfile.dev ./client
+
+script:
+  - docker run cuti/react-test npm test -- --coverage
+
+after_success:
+  - docker build -t cuti/multi-client ./client
+  - docker build -t cuti/multi-work ./worker
+  - docker build -t cuti/multi-server ./server
+  - docker build -t cuti/multi-nginx ./nginx
+  # Log in to docker CLI
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+  - docker push cuti/multi-client
+  - docker push cuti/multi-worker
+  - docker push cuti/multi-server
+  - docker push cuti/multi-nginx
